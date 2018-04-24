@@ -8,7 +8,7 @@ import (
   "strings"
 )
 
-const botIcon = ":innocent:"
+const botIcon = ":unitus:"
 
 var (
   commands = map[string]string {

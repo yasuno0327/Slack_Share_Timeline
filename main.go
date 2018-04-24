@@ -26,15 +26,15 @@ func run(api *slack.Client) int {
 			switch ev := msg.Data.(type) {
 
 			case *slack.ConnectedEvent:
-				botId = ev.Info.User.ID
-				botName = ev.Info.User.Name
-				fmt.Println(botId)
+				botId = "UAB75EYLA"
+				botName = "timeline"
 
 			case *slack.MessageEvent:
 				user := ev.User
 				text := ev.Text
 				channel := ev.Channel
-
+				fmt.Println(text)
+				fmt.Println(botId)
 				if ev.Type == "message" && strings.HasPrefix(text, "<@"+botId+">") {
 					bot.handleResponse(user, text, channel)
 				}

@@ -9,11 +9,11 @@ import (
 func connectDB() *gorm.DB {
   DBMS := "mysql"
   USER := "root"
-  PASS := ""
+  //PASS := ""
   //PROTOCOL := ""
   DBNAME := "slack_timeline"
 
-  CONNECT := USER+":"+PASS+"@"+"/"+DBNAME+"?charset=utf8&parseTime=True&loc=Local"
+  CONNECT := USER+"@"+"/"+DBNAME+"?charset=utf8&parseTime=True&loc=Local"
   db, err := gorm.Open(DBMS, CONNECT)
   if err != nil {
     panic(err.Error())
@@ -28,11 +28,13 @@ func Create(rooms []string) (attachment slack.Attachment) {
 
   for _, v := range clients {
     timeline := Timeline{OwnerID: owner, ClientID: v}
-    db.Create(&timeline)
+    if err := db.Create(&timeline).Error; err != nil {
+      panic(err.Error())
+    }
   }
 
   attachment = slack.Attachment{
-    Pretext: "Create timeline success!!",
+    Title: "Create timeline success!!",
   }
 
   return attachment
