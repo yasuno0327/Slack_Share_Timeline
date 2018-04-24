@@ -4,8 +4,8 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type timeline struct {
+type Timeline struct {
 	gorm.Model
-	ClientIDs []string
+	ClientID 	string
 	OwnerID   string
 }
