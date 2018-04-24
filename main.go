@@ -26,7 +26,7 @@ func run(api *slack.Client) int {
 			switch ev := msg.Data.(type) {
 
 			case *slack.ConnectedEvent:
-				botId = "UAB75EYLA"
+				botId = os.Getenv("SLACK_BOT_ID")
 				botName = "timeline"
 
 			case *slack.MessageEvent:
