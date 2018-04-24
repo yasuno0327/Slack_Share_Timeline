@@ -1,6 +1,8 @@
 package timeline
 
 import (
+  "fmt"
+
   "github.com/nlopes/slack"
   "github.com/jinzhu/gorm"
   _ "github.com/jinzhu/gorm/dialects/mysql"
@@ -25,6 +27,7 @@ func Create(rooms []string) (attachment slack.Attachment) {
   db := connectDB()
   owner := rooms[0]
   clients := rooms[1:]
+  fmt.Println(owner, clients)
 
   for _, v := range clients {
     timeline := Timeline{OwnerID: owner, ClientID: v}
@@ -34,7 +37,7 @@ func Create(rooms []string) (attachment slack.Attachment) {
   }
 
   attachment = slack.Attachment{
-    Title: "Create timeline success!!",
+    Text: "Create timeline success!!",
   }
 
   return attachment
