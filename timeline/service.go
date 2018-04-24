@@ -2,8 +2,8 @@ package timeline
 
 import (
   "fmt"
-  "regexp"
 
+  "golang.org/x/exp/utf8string"
   "github.com/nlopes/slack"
   "github.com/jinzhu/gorm"
   _ "github.com/jinzhu/gorm/dialects/mysql"
@@ -26,13 +26,12 @@ func connectDB() *gorm.DB {
 
 func Create(rooms []string) (attachment slack.Attachment) {
   db := connectDB()
-  regex := regexp.MustCompile(`[A-Z0-9]*{9}`)
-  owner := regex.FindAllStringSubmatch(rooms[0], -1)
+  owner := utf8string.NewString(rooms[0]).Slice(2, 10)
   clients := rooms[1:]
-  fmt.Println(owner[0][0], clients)
+  fmt.Println(owner, clients)
 
   for _, v := range clients {
-    timeline := Timeline{OwnerID: owner[0][0], ClientID: regex.FindAllStringSubmatch(v, -1)[0][0]}
+    timeline := Timeline{OwnerID: owner, ClientID: utf8string.NewString(v).Slice(2, 10) }
     if err := db.Create(&timeline).Error; err != nil {
       panic(err.Error())
     }
