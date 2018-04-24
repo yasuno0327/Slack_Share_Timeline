@@ -29,10 +29,10 @@ func Create(rooms []string) (attachment slack.Attachment) {
   regex := regexp.MustCompile(`[A-Z0-9]*{9}`)
   owner := regex.FindAllStringSubmatch(rooms[0], -1)
   clients := rooms[1:]
-  fmt.Println(owner, clients)
+  fmt.Println(owner[0][0], clients)
 
   for _, v := range clients {
-    timeline := Timeline{OwnerID: owner, ClientID: v}
+    timeline := Timeline{OwnerID: owner[0][0], ClientID: regex.FindAllStringSubmatch(v, -1)[0][0]}
     if err := db.Create(&timeline).Error; err != nil {
       panic(err.Error())
     }
