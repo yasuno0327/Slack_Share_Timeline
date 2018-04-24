@@ -1,7 +1,6 @@
 package main
 
 import (
-	"Slack_Share_Timeline/timeline"
 	"fmt"
 	"log"
 	"os"
@@ -29,16 +28,16 @@ func run(api *slack.Client) int {
 			case *slack.ConnectedEvent:
 				botId = ev.Info.User.ID
 				botName = ev.Info.User.Name
+				fmt.Println(botId)
 
 			case *slack.MessageEvent:
 				user := ev.User
 				text := ev.Text
 				channel := ev.Channel
 
-				if ev.Type == "message" && strings.HasPrefix(text, "<@"+botId">") {
+				if ev.Type == "message" && strings.HasPrefix(text, "<@"+botId+">") {
 					bot.handleResponse(user, text, channel)
 				}
-				fmt.Println(ev)
 				rtm.SendMessage(rtm.NewOutgoingMessage(ev.Msg.Text, os.Getenv("SLACK_SAMPLE_TIMELINE")))
 
 			case *slack.InvalidAuthEvent:

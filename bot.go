@@ -5,7 +5,6 @@ import (
   "Slack_Share_Timeline/timeline"
 
   "fmt"
-  "os"
   "strings"
 )
 
@@ -13,7 +12,7 @@ const botIcon = ":innocent:"
 
 var (
   commands = map[string]string {
-    "help": "Display all of the commands."
+    "help": "Display all of the commands.",
   }
 )
 
@@ -31,6 +30,7 @@ func NewBot(token string) *Bot {
 
 func (b *Bot) handleResponse(user, text, channel string) {
   var cmd string
+  var attachment slack.Attachment
 
   commandArray := strings.Fields(text)
   cmd = commandArray[1]
@@ -39,23 +39,22 @@ func (b *Bot) handleResponse(user, text, channel string) {
     case "create":
       // create timeline  object => {OwnerID => Owner channel id, ClientID => }
       roomArray := commandArray[2:]
-      attachment = timeline.Create(commandArray)
+      attachment = timeline.Create(roomArray)
     case "update":
       // Update timeline object
     case "destroy":
       // Destroy timeline
     }
   } else {
-    b.help()
   }
 
   params := slack.PostMessageParameters{
     Attachments: []slack.Attachment{attachment},
     Username: botName,
-    IconEmoji: botIcon
+    IconEmoji: botIcon,
   }
 
-  _, _, err = b.api.PostMessage(channel, "", params)
+  _, _, err := b.api.PostMessage(channel, "", params)
   if err != nil {
     b.rtm.SendMessage(b.rtm.NewOutgoingMessage(fmt.Sprintf("Sorry %s is error.... %s", cmd, err), channel))
     return
