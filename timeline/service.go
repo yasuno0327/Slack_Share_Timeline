@@ -2,6 +2,7 @@ package timeline
 
 import (
   "fmt"
+  "regexp"
 
   "github.com/nlopes/slack"
   "github.com/jinzhu/gorm"
@@ -25,7 +26,8 @@ func connectDB() *gorm.DB {
 
 func Create(rooms []string) (attachment slack.Attachment) {
   db := connectDB()
-  owner := rooms[0]
+  regex := regexp.MustCompile(`[A-Z0-9]*{9}`)
+  owner := regex.FindAllStringSubmatch(rooms[0], -1)
   clients := rooms[1:]
   fmt.Println(owner, clients)
 
