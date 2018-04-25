@@ -13,6 +13,9 @@ const botIcon = ":unitus:"
 var (
 	commands = map[string]string{
 		"help": "Display all of the commands.",
+		"create": "Create the timeline. Example => @timeline create #owner_timeline #client_timelines [#clinet_timelines...]",
+		"update": "Update the timeline. ※ Unimplemented",
+		"delete": "Delete the timeline. ※ Unimplemented",
 	}
 )
 
@@ -56,18 +59,19 @@ func (b *Bot) handleResponse(user, text, channel string) {
 
 	commandArray := strings.Fields(text)
 	cmd = commandArray[1]
-	if len(commandArray) >= 4 {
+	if len(commandArray) >= 1 {
 		switch cmd {
 		case "create":
 			// create timeline  object => {OwnerID => Owner channel id, ClientID => }
 			roomArray := commandArray[2:]
 			attachment = timeline.Create(roomArray)
+		case "help":
+			attachment = b.help()
 		case "update":
 			// Update timeline object
 		case "destroy":
 			// Destroy timeline
 		}
-	} else {
 	}
 
 	params := slack.PostMessageParameters{
@@ -81,4 +85,22 @@ func (b *Bot) handleResponse(user, text, channel string) {
 		b.rtm.SendMessage(b.rtm.NewOutgoingMessage(fmt.Sprintf("Sorry %s is error.... %s", cmd, err), channel))
 		return
 	}
+}
+
+func (b *Bot) help() (attachment slack.Attachment) {
+	fields := make([]slack.AttachmentField, 0)
+
+	for name, command := range commands {
+		fields = append(fields, slack.AttachmentField{
+			Title: "@"+botName+" " + name,
+			Value: command,
+		})
+	}
+
+	attachment = slack.Attachment{
+		Pretext: botName + " Command List",
+		Color: "#B733FF",
+		Fields: fields,
+	}
+	return attachment
 }
