@@ -6,6 +6,6 @@ import (
 
 type Timeline struct {
 	gorm.Model
-	ClientID 	string
-	OwnerID   string
+	ClientID string
+	OwnerID  string
 }
