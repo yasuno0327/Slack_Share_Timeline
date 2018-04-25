@@ -29,9 +29,25 @@ func NewBot(token string) *Bot {
 }
 
 func (b *Bot) handleDefaultMessage(user, text, channel string) {
-	var attachment slack.Attachment
-	attachment = timeline.HandleMessageResponse(user, text, channel)
-	return
+	//var attachment slack.Attachment
+	attachment, owner := timeline.HandleMessageResponse(user, text, channel)
+	fmt.Println(attachment, owner)
+
+	if len(attachment.Text) == 0 || len(owner) == 0 {
+		return
+	}
+
+	params := slack.PostMessageParameters{
+		Attachments: []slack.Attachment{attachment},
+		Username: botName,
+		IconEmoji: botIcon,
+	}
+
+	_, _, err := b.api.PostMessage(owner, "", params)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
 }
 
 func (b *Bot) handleResponse(user, text, channel string) {
