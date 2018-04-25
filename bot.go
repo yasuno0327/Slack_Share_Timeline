@@ -28,6 +28,12 @@ func NewBot(token string) *Bot {
 	return bot
 }
 
+func (b *Bot) handleDefaultMessage(user, text, channel string) {
+	var attachment slack.Attachment
+	attachment = timeline.HandleMessageResponse(user, text, channel)
+	return
+}
+
 func (b *Bot) handleResponse(user, text, channel string) {
 	var cmd string
 	var attachment slack.Attachment

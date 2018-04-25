@@ -43,3 +43,7 @@ func Create(rooms []string) (attachment slack.Attachment) {
 
 	return attachment
 }
+
+func HandleMessageResponse(user, text, channel string) (attachment slack.Attachment) {
+	return attachment
+}

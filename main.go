@@ -33,10 +33,10 @@ func run(api *slack.Client) int {
 				user := ev.User
 				text := ev.Text
 				channel := ev.Channel
-				fmt.Println(text)
-				fmt.Println(botId)
 				if ev.Type == "message" && strings.HasPrefix(text, "<@"+botId+">") {
 					bot.handleResponse(user, text, channel)
+				} else {
+					bot.handleDefaultMessage(user, text, channel)
 				}
 				rtm.SendMessage(rtm.NewOutgoingMessage(ev.Msg.Text, os.Getenv("SLACK_SAMPLE_TIMELINE")))
 
