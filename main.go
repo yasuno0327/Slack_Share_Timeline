@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	botId string
+	botId   string
 	botName string
 )
 
