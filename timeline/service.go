@@ -33,7 +33,7 @@ func Create(rooms []string) (attachment slack.Attachment) {
 	for _, v := range clients {
 		timeline := Timeline{OwnerID: owner, ClientID: utf8string.NewString(v).Slice(2, 11)}
 		if err := db.Create(&timeline).Error; err != nil {
-			panic(err.Error())
+			fmt.Println(err.Error())
 		}
 	}
 
