@@ -1,7 +1,7 @@
 package timeline
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -28,12 +28,11 @@ func Create(rooms []string) (attachment slack.Attachment) {
 	db := connectDB()
 	owner := utf8string.NewString(rooms[0]).Slice(2, 11)
 	clients := rooms[1:]
-	fmt.Println(owner, clients)
 
 	for _, v := range clients {
 		timeline := Timeline{OwnerID: owner, ClientID: utf8string.NewString(v).Slice(2, 11)}
 		if err := db.Create(&timeline).Error; err != nil {
-			fmt.Println(err.Error())
+			log.Println(err)
 		}
 	}
 
@@ -55,8 +54,8 @@ func HandleMessageResponse(user, text, channel string) (attachment slack.Attachm
 	for _, v := range timelines {
 		owner = v.OwnerID
 	}
-	attachment = slack.Attachment {
-		Text: "<@"+user+">"+" say  " + text,
+	attachment = slack.Attachment{
+		Text: "<@" + user + ">" + " say  " + text,
 	}
 	return attachment, owner
 }
